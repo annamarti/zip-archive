@@ -56,7 +56,7 @@ public class ConsoleZipper {
             System.out.println("Please enter directory's and file's names separated by whitespace");
             String input = bufferedReader.readLine();
             List<String> locations = getLocations(input);
-            System.out.println("Please enter zip name");
+            System.out.println("Please enter zip name with .zip extention ");
             String zipName = bufferedReader.readLine();
             String zip = Paths.get(zipName).toAbsolutePath().toString();
             zipService.zip(locations, zip);
@@ -71,7 +71,8 @@ public class ConsoleZipper {
             System.out.println("Please enter zip name");
             String zipName = bufferedReader.readLine();
             String zipPath = Paths.get("").resolve(zipName).toAbsolutePath().toString();
-            zipService.unzip(zipPath, zipPath);
+            String unZipPath = Paths.get(zipPath).getParent().toAbsolutePath().toString();
+            zipService.unzip(zipPath, unZipPath);
             System.out.println("The zip was successfully unpacked");
         } catch (Exception e) {
             e.printStackTrace();

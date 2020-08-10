@@ -1,5 +1,7 @@
 package com.example.zipper.service;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,14 +21,10 @@ import java.util.zip.ZipOutputStream;
 
 public class ZipService {
 
-    /**
-     * Zips the contents of the sources into the zip file.
-     *
-     * @param sources the absolute path of directories and files  to zip
-     * @param zipPath the path for zip
-     */
     public void zip(List<String> sources, String zipPath) throws IOException {
-        Files.deleteIfExists(Paths.get(zipPath));
+        if (!zipPath.endsWith(".zip")){
+            zipPath = zipPath + ".zip";
+        }
         try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipPath))) {
             for (String src : sources) {
                 if (Files.exists(Paths.get(src))) {
@@ -69,14 +67,17 @@ public class ZipService {
         }
     }
 
-    public void unzip(String zipLocation, String unzipLocation) throws IOException {
+    public void unzip(String zipLocation, String unzipLocation) throws IOException, InvalidArgumentException {
         Path zipPath = Paths.get(zipLocation);
         Path unzipPath = Paths.get(unzipLocation);
-        if (!(Files.exists(zipPath))) {
-            throw new FileNotFoundException(String.format("Zip file %s does not exist", zipPath.toAbsolutePath()));
+        if (!(Files.exists(zipPath)) || !isZip(zipPath)) {
+            throw new InvalidArgumentException(new String[]{zipLocation});
         }
         if (!Files.exists(unzipPath)) {
             Files.createDirectories(unzipPath);
+        }
+        if (!Files.isDirectory(unzipPath)) {
+            throw new InvalidArgumentException(new String[]{unzipLocation});
         }
         try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipPath.toFile()))) {
             ZipEntry entry = zipInputStream.getNextEntry();
@@ -106,7 +107,7 @@ public class ZipService {
         }
     }
 
-    public void deleteIfExist(Path pathToBeDeleted) throws IOException {
+    private void deleteIfExist(Path pathToBeDeleted) throws IOException {
         if (Files.exists(pathToBeDeleted)) {
             if (Files.isDirectory(pathToBeDeleted)) {
                 try (Stream<Path> stream = Files.list(pathToBeDeleted)) {
@@ -119,5 +120,13 @@ public class ZipService {
                 Files.delete(pathToBeDeleted);
             }
         }
+    }
+
+    private boolean isZip(Path path) throws IOException {
+        String contentType = Files.probeContentType(path);
+        if (contentType != null && contentType.contains("zip")) {
+            return true;
+        }
+        return false;
     }
 }
