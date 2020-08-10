@@ -68,7 +68,7 @@ public class ConsoleZipper {
 
     public void unzip() {
         try {
-            System.out.println("Please enter zip name");
+            System.out.println("Please enter zip name .zip extention ");
             String zipName = bufferedReader.readLine();
             String zipPath = Paths.get("").resolve(zipName).toAbsolutePath().toString();
             String unZipPath = Paths.get(zipPath).getParent().toAbsolutePath().toString();

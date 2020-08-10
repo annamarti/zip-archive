@@ -69,6 +69,7 @@ public class ZipServiceTest {
     public void zipNotEmptyDirectory() throws IOException {
         String dir2 = tempFolder.newFolder("dir1", "dir2").getAbsolutePath();
         String txt2 = tempFolder.newFile("dir1" + File.separator + "dir2" + File.separator + "txt2.txt").getAbsolutePath();
+
         zipService.zip(Arrays.asList(dir2), zipPath2.toAbsolutePath().toString());
         assertTrue(Files.exists(zipPath2));
         ZipFile zipFile = new ZipFile(zipPath2.toString());
@@ -91,6 +92,7 @@ public class ZipServiceTest {
         }
         String folder = tempFolder.newFolder("folder").getAbsolutePath();
         Files.deleteIfExists(Paths.get(folder + File.separator + "aa.txt"));
+
         zipService.unzip(zipPath.toAbsolutePath().toString(), folder);
         assertTrue(Files.exists(Paths.get(folder + File.separator + "aa.txt")));
         List<String> strings = Files.readAllLines(Paths.get(folder + File.separator + "aa.txt"));
@@ -131,6 +133,7 @@ public class ZipServiceTest {
         }
         String folder = tempFolder.newFolder("folder").getAbsolutePath();
         Files.deleteIfExists(Paths.get(folder + File.separator + dirName));
+
         zipService.unzip(zipPath.toAbsolutePath().toString(), folder);
         assertTrue(Files.exists(Paths.get(folder + File.separator + dirName)));
         assertTrue(Files.isDirectory(Paths.get(folder + File.separator + dirName)));
