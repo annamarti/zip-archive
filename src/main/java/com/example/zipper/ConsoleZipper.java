@@ -21,6 +21,7 @@ public class ConsoleZipper {
     public void run() {
         boolean isRun = true;
         while (isRun) {
+            printCommands();
             int command = readCommand();
             switch (command) {
                 case EXIT:
@@ -38,10 +39,13 @@ public class ConsoleZipper {
         }
     }
 
-    public int readCommand() {
+    private void printCommands() {
         System.out.println("Please enter " + ZIP + " for zipping files");
         System.out.println("Please enter " + UNZIP + " for unzipping zip");
         System.out.println("Please enter " + EXIT + " for exit");
+    }
+
+    private int readCommand() {
         int command;
         try {
             command = Integer.parseInt(bufferedReader.readLine());

@@ -1,6 +1,7 @@
 package com.example.zipper.service;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
+
+import java.lang.IllegalArgumentException;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -67,17 +68,17 @@ public class ZipService {
         }
     }
 
-    public void unzip(String zipLocation, String unzipLocation) throws IOException, InvalidArgumentException {
+    public void unzip(String zipLocation, String unzipLocation) throws IOException, IllegalArgumentException {
         Path zipPath = Paths.get(zipLocation);
         Path unzipPath = Paths.get(unzipLocation);
         if (!(Files.exists(zipPath)) || !isZip(zipPath)) {
-            throw new InvalidArgumentException(new String[]{zipLocation});
+            throw new IllegalArgumentException();
         }
         if (!Files.exists(unzipPath)) {
             Files.createDirectories(unzipPath);
         }
         if (!Files.isDirectory(unzipPath)) {
-            throw new InvalidArgumentException(new String[]{unzipLocation});
+            throw new IllegalArgumentException();
         }
         try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipPath.toFile()))) {
             ZipEntry entry = zipInputStream.getNextEntry();

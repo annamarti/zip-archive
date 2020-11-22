@@ -1,6 +1,5 @@
 package com.example.zipper.service;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -85,7 +84,7 @@ public class ZipServiceTest {
     }
 
     @Test
-    public void unzipZipWithFile() throws IOException, InvalidArgumentException {
+    public void unzipZipWithFile() throws IOException, IllegalArgumentException {
         try (ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(zipPath.toFile()))) {
             zipOutputStream.putNextEntry(new ZipEntry("aa.txt"));
             zipOutputStream.write("121212".getBytes());
@@ -101,7 +100,7 @@ public class ZipServiceTest {
     }
 
     @Test
-    public void unzipZipWithEmptyDirectory() throws IOException, InvalidArgumentException {
+    public void unzipZipWithEmptyDirectory() throws IOException, IllegalArgumentException {
         String dirName = "dir3";
         Path dir3 = tempFolder.newFolder(dirName).toPath();
         if (!Files.exists(dir3)) {
@@ -120,7 +119,7 @@ public class ZipServiceTest {
     }
 
     @Test
-    public void unzipZipWithNotEmptyDirectory() throws IOException, InvalidArgumentException {
+    public void unzipZipWithNotEmptyDirectory() throws IOException, IllegalArgumentException {
         String dirName = "dir3";
         String fileName = "txt.txt";
 
@@ -141,8 +140,8 @@ public class ZipServiceTest {
     }
 
 
-    @Test(expected = InvalidArgumentException.class)
-    public void unzipZipInvalidOutputLocation() throws IOException, InvalidArgumentException {
+    @Test(expected = IllegalArgumentException.class)
+    public void unzipZipInvalidOutputLocation() throws IOException, IllegalArgumentException {
         try (ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(zipPath.toFile()))) {
             ZipEntry zipEntry = new ZipEntry("abc");
             zipOutputStream.putNextEntry(zipEntry);
@@ -151,8 +150,8 @@ public class ZipServiceTest {
         zipService.unzip(zipPath.toAbsolutePath().toString(), zipPath.toAbsolutePath().toString());
     }
 
-    @Test(expected = InvalidArgumentException.class)
-    public void unzipNonExistingZip() throws IOException, InvalidArgumentException {
+    @Test(expected = IllegalArgumentException.class)
+    public void unzipNonExistingZip() throws IOException, IllegalArgumentException {
         Files.deleteIfExists(zipPath);
         String folder = tempFolder.newFolder("folder").getAbsolutePath();
         zipService.unzip(zipPath.toAbsolutePath().toString(), folder);
